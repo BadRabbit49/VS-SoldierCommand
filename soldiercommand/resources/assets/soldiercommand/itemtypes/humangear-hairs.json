@@ -1,0 +1,62 @@
+﻿{
+	"code": "humanhair",
+	"class": "ItemHumanStuff",
+	"maxstacksize": 1,
+	"attributes": {
+		"wearableAttachment": true,
+		"handbook": {
+			"exclude": true
+		}
+	},
+	"variantgroups": [
+		{ "code": "type", "states": [ "hairs" ] },
+		{"code": "name", "states": [ "bald", "afro", "balding", "classic", "combed", "dreadlocks", "indigenousbalding", "iroquois", "kniaz", "layered", "longflowing", "longwithstrands", "looselong", "mediumlengthbangs", "messy1", "messy2", "short", "shortparted", "shortspiky", "shorttrimmed", "tonsure" ] }
+	],
+	"shapeByType": {
+		"*-bald": { "base": "game:entity/humanoid/seraphskinparts/hair-base/bald" },
+		"*-afro": { "base": "game:entity/humanoid/seraphskinparts/hair-base/afro" },
+		"*-balding": { "base": "game:entity/humanoid/seraphskinparts/hair-base/balding" },
+		"*-classic": { "base": "game:entity/humanoid/seraphskinparts/hair-base/classic" },
+		"*-combed": { "base": "game:entity/humanoid/seraphskinparts/hair-base/combed" },
+		"*-dreadlocks": { "base": "game:entity/humanoid/seraphskinparts/hair-base/dreadlocks" },
+		"*-indigenousbalding": { "base": "game:entity/humanoid/seraphskinparts/hair-base/indigenousbalding" },
+		"*-iroquois": { "base": "game:entity/humanoid/seraphskinparts/hair-base/iroquois" },
+		"*-kniaz": { "base": "game:entity/humanoid/seraphskinparts/hair-base/kniaz" },
+		"*-layered": { "base": "game:entity/humanoid/seraphskinparts/hair-base/layered" },
+		"*-longflowing": { "base": "game:entity/humanoid/seraphskinparts/hair-base/longflowing" },
+		"*-longwithstrands": { "base": "game:entity/humanoid/seraphskinparts/hair-base/longwithstrands" },
+		"*-looselong": { "base": "game:entity/humanoid/seraphskinparts/hair-base/looselong" },
+		"*-mediumlengthbangs": { "base": "game:entity/humanoid/seraphskinparts/hair-base/mediumlength-bangs" },
+		"*-messy1": { "base": "game:entity/humanoid/seraphskinparts/hair-base/messy" },
+		"*-messy2": { "base": "game:entity/humanoid/seraphskinparts/hair-base/messy2" },
+		"*-short": { "base": "game:entity/humanoid/seraphskinparts/hair-base/short" },
+		"*-shortparted": { "base": "game:entity/humanoid/seraphskinparts/hair-base/short-parted" },
+		"*-shortspiky": { "base": "game:entity/humanoid/seraphskinparts/hair-base/shortspiky" },
+		"*-shorttrimmed": { "base": "game:entity/humanoid/seraphskinparts/hair-base/short-trimmed" },
+		"*-tonsure": { "base": "game:entity/humanoid/seraphskinparts/hair-base/shortspiky" }
+	},
+	"texturesByType": {
+		"*-cordovan": { "material": { "base": "game:entity/humanoid/seraphskinparts/hair/cordovan" } },
+		"*-darkpurple": { "material": { "base": "game:entity/humanoid/seraphskinparts/hair/darkpurple" } },
+		"*-ecru": { "material": { "base": "game:entity/humanoid/seraphskinparts/hair/ecru" } },
+		"*-eerieblack": { "material": { "base": "game:entity/humanoid/seraphskinparts/hair/eerieblack" } },
+		"*-harvestgold": { "material": { "base": "game:entity/humanoid/seraphskinparts/hair/harvestgold" } },
+		"*-heliotropegray": { "material": { "base": "game:entity/humanoid/seraphskinparts/hair/heliotropegray" } },
+		"*-indigodye": { "material": { "base": "game:entity/humanoid/seraphskinparts/hair/indigodye" } },
+		"*-lightgray": { "material": { "base": "game:entity/humanoid/seraphskinparts/hair/lightgray" } },
+		"*-liver": { "material": { "base": "game:entity/humanoid/seraphskinparts/hair/liver" } },
+		"*-mossgreen": { "material": { "base": "game:entity/humanoid/seraphskinparts/hair/mossgreen" } },
+		"*-oldburgundy": { "material": { "base": "game:entity/humanoid/seraphskinparts/hair/oldburgundy" } },
+		"*-palatinatepurple": { "material": { "base": "game:entity/humanoid/seraphskinparts/hair/palatinatepurple" } },
+		"*-queenblue": { "material": { "base": "game:entity/humanoid/seraphskinparts/hair/queenblue" } },
+		"*-rosewood": { "material": { "base": "game:entity/humanoid/seraphskinparts/hair/rosewood" } },
+		"*-russet": { "material": { "base": "game:entity/humanoid/seraphskinparts/hair/russet" } },
+		"*-sanddune": { "material": { "base": "game:entity/humanoid/seraphskinparts/hair/sanddune" } },
+		"*-seagreen": { "material": { "base": "game:entity/humanoid/seraphskinparts/hair/seagreen" } },
+		"*-silverchalice": { "material": { "base": "game:entity/humanoid/seraphskinparts/hair/silverchalice" } },
+		"*-slategray": { "material": { "base": "game:entity/humanoid/seraphskinparts/hair/slategray" } },
+		"*-steelblue": { "material": { "base": "game:entity/humanoid/seraphskinparts/hair/steelblue" } },
+		"*-wheat": { "material": { "base": "game:entity/humanoid/seraphskinparts/hair/wheat" } },
+		"*-wintergreendream": { "material": { "base": "game:entity/humanoid/seraphskinparts/hair/wintergreendream" } }
+	}
+}

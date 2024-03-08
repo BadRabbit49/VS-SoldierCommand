@@ -1,0 +1,17 @@
+{
+	"item-creature-humanoid-soldier-male-spearsman": "Spearman",
+	"item-creature-humanoid-soldier-female-spearsman": "Spearwoman",
+	"item-creature-humanoid-soldier-male-swordsman": "Swordsman",
+	"item-creature-humanoid-soldier-female-swordsman": "Swordswoman",
+	"item-creature-humanoid-soldier-male-shieldman": "Shieldbearer",
+	"item-creature-humanoid-soldier-female-shieldman": "Shieldbearer",
+	"item-creature-humanoid-soldier-male-guardsman": "Guardsman",
+	"item-creature-humanoid-soldier-female-guardsman": "Guardswoman",
+	"item-creature-humanoid-archer-male-bowman": "Bowman",
+	"item-creature-humanoid-archer-female-bowman": "Bowwoman",
+	"item-creature-humanoid-archer-male-gunner": "Rifleman",
+	"item-creature-humanoid-archer-female-gunner": "Riflewoman",
+	"command:interact-feed": "Give Rations",
+	"command:interact-revive": "Revive Soldier",
+	"command:message-soldier-dead": "Dead Soldier"
+}
