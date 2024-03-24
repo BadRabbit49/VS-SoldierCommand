@@ -1,0 +1,6 @@
+{
+	"item-creature-humanoid-archer-male": "ทหาร",
+	"item-creature-humanoid-archer-female": "ทหาร",
+	"command:interact-revive": "ฟื้นคืนชีพทหาร",
+	"command:message-soldier-dead": "ทหารที่ตายแล้ว"
+}

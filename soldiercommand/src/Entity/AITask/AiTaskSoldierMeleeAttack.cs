@@ -3,67 +3,97 @@ using Vintagestory.API.Datastructures;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
 using System;
+using System.Linq;
 
 namespace SoldierCommand {
 	public class AiTaskSoldierMeleeAttack : AiTaskMeleeAttack {
-		public AnimationMetaData baseAnimMeta { get; set; }
-        public AnimationMetaData stabAnimMeta { get; set; }
-        public AnimationMetaData slashAnimMeta { get; set; }
-        public float unarmedDamage { get; set; }
-        public float armedDamageMultiplier { get; set; }
 		public AiTaskSoldierMeleeAttack(EntityAgent entity) : base(entity) { }
+		public float unarmedDamage { get; set; } = 1;
+		public AnimationMetaData SwordHit1AnimMeta { get; set; }
+		public AnimationMetaData SwordHit2AnimMeta { get; set; }
+		public AnimationMetaData SimpleHitAnimMeta { get; set; }
+		public AnimationMetaData KnifeStabAnimMeta { get; set; }
+		public AnimationMetaData SpearStabAnimMeta { get; set; }
 
 		public override void LoadConfig(JsonObject taskConfig, JsonObject aiConfig) {
 			base.LoadConfig(taskConfig, aiConfig);
-			baseAnimMeta = animMeta;
-			unarmedDamage = damage;
-			armedDamageMultiplier = taskConfig["armedDamageMultiplier"].AsFloat(4);
-			if (taskConfig["stabanimation"].Exists) {
-				stabAnimMeta = new AnimationMetaData() {
-					Code = taskConfig["stabanimation"].AsString()?.ToLowerInvariant(),
-					Animation = taskConfig["stabanimation"].AsString()?.ToLowerInvariant(),
-					AnimationSpeed = taskConfig["stabanimationSpeed"].AsFloat(1f)
-				}.Init();
-			}
-			if (taskConfig["slashanimation"].Exists) {
-				slashAnimMeta = new AnimationMetaData() {
-					Code = taskConfig["slashanimation"].AsString()?.ToLowerInvariant(),
-					Animation = taskConfig["slashanimation"].AsString()?.ToLowerInvariant(),
-					AnimationSpeed = taskConfig["slashanimationSpeed"].AsFloat(1f)
-				}.Init();
-			}
+			SwordHit1AnimMeta = new AnimationMetaData() {
+				Animation = "SwordHit1".ToLowerInvariant(),
+				Code = "SwordHit1".ToLowerInvariant(),
+			}.Init();
+			SwordHit2AnimMeta = new AnimationMetaData() {
+				Animation = "SwordHit2".ToLowerInvariant(),
+				Code = "SwordHit2".ToLowerInvariant(),
+			}.Init();
+			SimpleHitAnimMeta = new AnimationMetaData() {
+				Animation = "FalxHit".ToLowerInvariant(),
+				Code = "FalxHit".ToLowerInvariant(),
+			}.Init();
+			KnifeStabAnimMeta = new AnimationMetaData() {
+				Animation = "KnifeStab".ToLowerInvariant(),
+				Code = "KnifeStab".ToLowerInvariant(),
+			}.Init();
+			SpearStabAnimMeta = new AnimationMetaData() {
+				Animation = "SpearHit".ToLowerInvariant(),
+				Code = "SpearHit".ToLowerInvariant(),
+			}.Init();
 		}
-
+		
 		public override bool IsTargetableEntity(Entity ent, float range, bool ignoreEntityCode = false) {
-			string ownerUID = (entity as EntityArcher).ownerUID;
-			if (ent is EntityPlayer player) {
-				if (ownerUID != null && player.PlayerUID == ownerUID) {
-					return false;
+			if (ent?.Alive == true) {
+				if (attackedByEntity == ent) {
+					return true;
 				}
-				if (SoldierConfig.Current.PvpOff && player.PlayerUID != ownerUID) {
-					return false;
+				if (SoldierUtility.CanTargetThis(entity, ent)) {
+					return true;
 				}
-			}
-			if (attackedByEntity == ent) {
-				return base.IsTargetableEntity(ent, range, true);
 			}
 			return base.IsTargetableEntity(ent, range, ignoreEntityCode);
 		}
 
 		public override void StartExecute() {
-			EntityArcher thisEnt = (entity as EntityArcher);
-			if (thisEnt.RightHandItemSlot != null && !thisEnt.RightHandItemSlot.Empty) {
-				damage = Math.Max(thisEnt.RightHandItemSlot.Itemstack.Item.AttackPower * armedDamageMultiplier, unarmedDamage);
-				if (thisEnt.RightHandItemSlot.Itemstack.Item.Code.Path.Contains("spear")) {
-					animMeta = stabAnimMeta;
+			// Initialize a random attack animation and sounds!
+			Random rnd = new Random();
+			if (entity.RightHandItemSlot != null && !entity.RightHandItemSlot.Empty) {
+				damage = entity.RightHandItemSlot.Itemstack.Item.AttackPower;
+				if (entity.RightHandItemSlot.Itemstack.Item.Code.Path.Contains("spear")) {
+					animMeta = SpearStabAnimMeta;
+					entity.World.PlaySoundAt(new AssetLocation("game:sounds/player/stab"), entity, null, false);
 				} else {
-					animMeta = slashAnimMeta;
+					switch (rnd.Next(1, 4)) {
+						case 1:
+							animMeta = SwordHit1AnimMeta;
+							break;
+						case 2:
+							animMeta = SwordHit2AnimMeta;
+							break;
+						case 3:
+							animMeta = SimpleHitAnimMeta;
+							break;
+						case 4:
+							animMeta = KnifeStabAnimMeta;
+							break;
+						default:
+							animMeta = SimpleHitAnimMeta;
+							break;
+					}
+					switch (rnd.Next(1, 2)) {
+						case 1:
+							entity.World.PlaySoundAt(new AssetLocation("game:sounds/player/strike1"), entity, null, false);
+							break;
+						case 2:
+							entity.World.PlaySoundAt(new AssetLocation("game:sounds/player/strike2"), entity, null, false);
+							break;
+						default:
+							entity.World.PlaySoundAt(new AssetLocation("game:sounds/player/strike2"), entity, null, false);
+							break;
+					}
 				}
 			} else {
 				damage = unarmedDamage;
-				animMeta = baseAnimMeta;
 			}
-			base.StartExecute();
+
+            base.StartExecute();
 		}
 
 		public void OnAllyAttacked(Entity byEntity) {

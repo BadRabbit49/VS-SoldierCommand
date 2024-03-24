@@ -1,0 +1,6 @@
+{
+	"item-creature-humanoid-archer-male": "جندي",
+	"item-creature-humanoid-archer-female": "جندية",
+	"command:interact-revive": "إحياء هذا الجندي",
+	"command:message-soldier-dead": "الجندي الميت"
+}

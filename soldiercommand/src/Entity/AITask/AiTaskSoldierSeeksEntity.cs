@@ -5,9 +5,21 @@ using Vintagestory.API.Common.Entities;
 
 namespace SoldierCommand {
 	public class AiTaskSoldierSeeksEntity : AiTaskSeekEntity {
-		protected long lastCheckTotalMs { get; set; }
-		protected long lastCheckCooldown { get; set; } = 500;
-		protected long lastCallForHelp { get; set; }
+		long lastCheckTotalMs { get; set; }
+		long lastCheckCooldown { get; set; } = 500;
+		long lastCallForHelp { get; set; }
+		private long lastOwnerLookup { get; set; }
+
+		private BehaviorGearItems _behaviorGearItems;
+		private BehaviorGearItems behaviorGearItems {
+			get {
+				if (_behaviorGearItems == null && lastOwnerLookup + 5000 < entity.World.ElapsedMilliseconds) {
+					lastOwnerLookup = entity.World.ElapsedMilliseconds;
+					_behaviorGearItems = entity.GetBehavior<BehaviorGearItems>();
+				}
+				return _behaviorGearItems;
+			}
+		}
 
 		public AiTaskSoldierSeeksEntity(EntityAgent entity) : base(entity) { }
 
@@ -16,18 +28,21 @@ namespace SoldierCommand {
 		}
 
 		public override bool ShouldExecute() {
+			if (whenInEmotionState == null) {
+				return false;
+			}
 			if (lastCheckTotalMs + lastCheckCooldown > entity.World.ElapsedMilliseconds) {
 				return false;
 			} else {
 				lastCheckTotalMs = entity.World.ElapsedMilliseconds;
 			}
-			if (targetEntity != null && targetEntity.Alive && entityInReach(targetEntity)) {
+			if (targetEntity != null && targetEntity.Alive && EntityInReach(targetEntity)) {
 				targetPos = targetEntity.ServerPos.XYZ;
 				return true;
 			} else {
 				targetEntity = null;
 			}
-			if (attackedByEntity != null && attackedByEntity.Alive && entityInReach(attackedByEntity)) {
+			if (attackedByEntity != null && attackedByEntity.Alive && EntityInReach(attackedByEntity)) {
 				targetEntity = attackedByEntity;
 				targetPos = targetEntity.ServerPos.XYZ;
 				return true;
@@ -37,27 +52,29 @@ namespace SoldierCommand {
 			if (lastSearchTotalMs + searchWaitMs < entity.World.ElapsedMilliseconds) {
 				lastSearchTotalMs = entity.World.ElapsedMilliseconds;
 				targetEntity = partitionUtil.GetNearestInteractableEntity(entity.ServerPos.XYZ, seekingRange, potentialTarget => IsTargetableEntity(potentialTarget, seekingRange));
-				if (targetEntity != null && targetEntity.Alive && entityInReach(targetEntity)) {
+				if (targetEntity != null && targetEntity.Alive && EntityInReach(targetEntity)) {
 					targetPos = targetEntity.ServerPos.XYZ;
 					return true;
 				} else {
 					targetEntity = null;
+					return false;
 				}
 			}
 			return false;
 		}
 
 		public override bool IsTargetableEntity(Entity ent, float range, bool ignoreEntityCode = false) {
-			if (ent == null) {
+			if (targetEntity == null) {
 				return false;
 			}
-			var owner = (entity as EntityArcher).ownerINT;
-			if (ent is EntityPlayer player) {
-				if (player.PlayerUID == owner?.PlayerUID && owner != null) {
+			if (targetEntity is EntityPlayer player) {
+				string owner = behaviorGearItems.ownerUID;
+				int group = behaviorGearItems.groupUID;
+				if (player.PlayerUID == owner) {
 					return false;
 				}
-				if (SoldierConfig.Current.PvpOff && player.PlayerUID != owner?.PlayerUID) {
-					return false;
+				if (!entity.Api.World.Config.GetAsBool("PvpOff") && player.Player.GetGroup(group) != null) {
+					return true;
 				}
 			}
 			if (ent.ServerPos.SquareDistanceTo(entity.ServerPos) > range * range) {
@@ -68,20 +85,21 @@ namespace SoldierCommand {
 
 		public override void StartExecute() {
 			base.StartExecute();
+			world.Logger.Chat("Started Seeking Execute on: " + targetEntity.ToString());
 		}
 
 		public override bool ContinueExecute(float dt) {
-			return targetEntity != null && entityInReach(targetEntity) && base.ContinueExecute(dt);
+			return targetEntity != null && EntityInReach(targetEntity) && base.ContinueExecute(dt);
 		}
 
 		public override void OnEntityHurt(DamageSource source, float damage) {
 			base.OnEntityHurt(source, damage);
 			if (source.Type != EnumDamageType.Heal && lastCallForHelp + 5000 < entity.World.ElapsedMilliseconds) {
 				lastCallForHelp = entity.World.ElapsedMilliseconds;
+				// Alert all surrounding units! We're under attack!
 				foreach (var soldier in entity.World.GetEntitiesAround(entity.ServerPos.XYZ, 15, 4, entity => (entity is EntityArcher))) {
 					var taskManager = soldier.GetBehavior<EntityBehaviorTaskAI>().TaskManager;
 					taskManager.GetTask<AiTaskSoldierSeeksEntity>()?.OnAllyAttacked(source.SourceEntity);
-					taskManager.GetTask<AiTaskSoldierMeleeAttack>()?.OnAllyAttacked(source.SourceEntity);
 					taskManager.GetTask<AiTaskSoldierRangeAttack>()?.OnAllyAttacked(source.SourceEntity);
 				}
 			}
@@ -93,9 +111,9 @@ namespace SoldierCommand {
 			}
 		}
 
-		private bool entityInReach(Entity candidate) {
+		private bool EntityInReach(Entity candidate) {
 			var squareDistance = candidate.ServerPos.SquareDistanceTo(entity.ServerPos.XYZ);
-			return squareDistance < seekingRange * seekingRange * 2 && squareDistance > 250000;
+			return squareDistance < seekingRange * seekingRange * 2 && squareDistance > 4;
 		}
 	}
 }

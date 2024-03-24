@@ -1,0 +1,6 @@
+{
+	"item-creature-humanoid-archer-male": "Shìbīng",
+	"item-creature-humanoid-archer-female": "Shìbīng",
+	"command:interact-revive": "Fùhuó zhège shìbīng",
+	"command:message-soldier-dead": "Sǐqù dí shìbīng"
+}

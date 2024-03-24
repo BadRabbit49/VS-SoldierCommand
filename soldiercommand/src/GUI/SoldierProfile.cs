@@ -13,7 +13,6 @@ namespace SoldierCommand {
 		private int currentY = 20;
 
 		string soldierName;
-		bool multiplyAllowed = true;
 		bool abandon = false;
 
 		public SoldierProfile(ICoreClientAPI capi, long targetEntityId) : base(capi) {
@@ -73,7 +72,6 @@ namespace SoldierCommand {
 		private bool onClick() {
 			var message = new SoldierProfileMsg();
 			message.soldierName = soldierName;
-			message.multiplyAllowed = multiplyAllowed;
 			message.abandon = abandon;
 			message.targetEntityUID = targetEntityId;
 

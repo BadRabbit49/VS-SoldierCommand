@@ -2,6 +2,9 @@
 
 namespace SoldierCommand {
 	public class InventoryArcher : InventoryGeneric {
+		public InventoryArcher(string className, string instanceId, ICoreAPI api) : base(20, className, instanceId, api) { }
+		public InventoryArcher(string invId, ICoreAPI api) : base(20, invId, api) { }
+
 		public static readonly int[] ClothingsSlotIds = new int[6] { 0, 1, 2, 11, 3, 4 };
 		public static readonly int[] AccessorySlotIds = new int[6] { 6, 7, 8, 10, 5, 9 };
 		public const int HeadArmorSlotId = 12;
@@ -17,11 +20,11 @@ namespace SoldierCommand {
 		public ItemSlot BackItemSlot => this[17];
 		public ItemSlot AmmoItemSlot => this[18];
 		public ItemSlot HealItemSlot => this[19];
-		public override ItemSlot this [int slotId] { get => slots[slotId]; set => slots[slotId] = value; }
-		public override int Count => slots.Length;
-		public InventoryArcher(string className, string instanceId, ICoreAPI api) : base(20, className, instanceId, api) { }
-		public InventoryArcher(string invId, ICoreAPI api) : base(20, invId, api) { }
 
+		public override ItemSlot this [int slotId] { get => slots[slotId]; set => slots[slotId] = value; }
+
+		public override int Count => slots.Length;
+		
 		public override float GetSuitability(ItemSlot sourceSlot, ItemSlot targetSlot, bool isMerge) {
 			return (!isMerge) ? (baseWeight + 1f) : (baseWeight + 3f);
 		}

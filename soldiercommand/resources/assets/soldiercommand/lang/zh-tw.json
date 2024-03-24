@@ -1,0 +1,6 @@
+{
+	"item-creature-humanoid-archer-male": "男士兵",
+	"item-creature-humanoid-archer-female": "女兵",
+	"command:interact-revive": "復活這個士兵",
+	"command:message-soldier-dead": "死去的士兵"
+}

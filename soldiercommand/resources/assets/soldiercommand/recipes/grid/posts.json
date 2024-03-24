@@ -1,0 +1,40 @@
+﻿[
+	{
+		"ingredientPattern": "H, H, P",
+		"ingredients": {
+			"H": { "type": "item", "code": "game:hoop-*", "allowedVariants": [ "lead", "copper", "tinbronze", "bismuthbronze", "blackbronze", "brass", "silver", "gold", "iron", "meteoriciron", "steel" ], "name": "metal" },
+			"P": { "type": "block", "code": "game:metalplate-{metal}" }
+		},
+		"width": 1,
+		"height": 3,
+		"output": {
+			"type": "block",
+			"code": "post",
+			"attributes": {
+				"metal": "{metal}",
+				"fuels": "null",
+				"state": "none",
+				"level": "good"
+			}
+		}
+	},
+	{
+		"ingredientPattern": "H, H, P",
+		"ingredients": {
+			"H": { "type": "item", "code": "game:hoop-*", "allowedVariants": [ "electrum" ], "name": "metal" },
+			"P": { "type": "block", "code": "game:metalplate-{metal}" }
+		},
+		"width": 1,
+		"height": 3,
+		"output": {
+			"type": "block",
+			"code": "post-temp",
+			"attributes": {
+				"metal": "{metal}",
+				"fuels": "null",
+				"state": "none",
+				"level": "good"
+			}
+		}
+	}
+]
