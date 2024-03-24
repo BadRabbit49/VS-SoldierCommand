@@ -1,0 +1,6 @@
+{
+	"item-creature-humanoid-archer-male": "군인",
+	"item-creature-humanoid-archer-female": "여군",
+	"command:interact-revive": "이 병사를 부활시키세요",
+	"command:message-soldier-dead": "죽은 군인"
+}

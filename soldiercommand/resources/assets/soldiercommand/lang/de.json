@@ -1,0 +1,6 @@
+{
+	"item-creature-humanoid-archer-male": "Soldat",
+	"item-creature-humanoid-archer-female": "Soldatin",
+	"command:interact-revive": "Belebe diesen Soldaten wieder",
+	"command:message-soldier-dead": "Toter Soldat"
+}

@@ -4,9 +4,7 @@ using Vintagestory.GameContent;
 
 namespace SoldierCommand {
 	public abstract class ItemSlotArcher : ItemSlot {
-		public ItemSlotArcher(InventoryArcher inventory) : base(inventory) {
-			MaxSlotStackSize = 1;
-		}
+		public ItemSlotArcher(InventoryArcher inventory) : base(inventory) { }
 	}
 
 	public class ItemSlotArcherWear : ItemSlotArcher {
@@ -34,9 +32,9 @@ namespace SoldierCommand {
 			this.dressType = dressType;
 			IsArmorSlot = IsArmor(dressType);
 			switch (slotId) {
-				case 12: BackgroundIcon = "itemslot-head.svg"; break;
-				case 13: BackgroundIcon = "itemslot-body.svg"; break;
-				case 14: BackgroundIcon = "itemslot-legs.svg"; break;
+				case 12: BackgroundIcon = "itemslot-head"; break;
+				case 13: BackgroundIcon = "itemslot-body"; break;
+				case 14: BackgroundIcon = "itemslot-legs"; break;
 				default: iconByDressType.TryGetValue(dressType, out BackgroundIcon); break;
 			}
 		}
@@ -67,8 +65,8 @@ namespace SoldierCommand {
 	public class ItemSlotArcherHand : ItemSlotArcher {
 		public ItemSlotArcherHand(InventoryArcher inventory, int slotId) : base(inventory) {
 			switch (slotId) {
-				case 15: BackgroundIcon = "itemslot-shield.svg"; StorageType = EnumItemStorageFlags.Offhand; break;
-				case 16: BackgroundIcon = "itemslot-sword.svg"; break;
+				case 15: BackgroundIcon = "itemslot-shield"; StorageType = EnumItemStorageFlags.Offhand; break;
+				case 16: BackgroundIcon = "itemslot-sword"; break;
 			}
 		}
 
@@ -81,9 +79,8 @@ namespace SoldierCommand {
 		}
 
 		private bool IsAcceptable(ItemSlot sourceSlot) {
-			var collectible = sourceSlot?.Itemstack?.Collectible;
 			// Check if the item can be placed on a toolrack, or held like a lantern or torch.
-			return collectible?.Attributes?["toolrackTransform"]?.Exists ?? collectible?.Attributes?["heldTpIdleAnimation"]?.Exists ?? false;
+			return sourceSlot?.Itemstack?.Collectible?.Attributes?["toolrackTransform"]?.Exists ?? sourceSlot?.Itemstack?.Collectible?.Attributes?["heldTpIdleAnimation"]?.Exists ?? false;
 		}
 	}
 
@@ -91,7 +88,7 @@ namespace SoldierCommand {
 		public override EnumItemStorageFlags StorageType => EnumItemStorageFlags.Backpack;
 
 		public ItemSlotArcherBack(InventoryArcher inventory) : base(inventory) {
-			BackgroundIcon = "itemslot-backpack.svg";
+			BackgroundIcon = "itemslot-backpack";
 		}
 
 		public override bool CanTakeFrom(ItemSlot sourceSlot, EnumMergePriority priority = EnumMergePriority.AutoMerge) {
@@ -111,7 +108,7 @@ namespace SoldierCommand {
 	public class ItemSlotArcherAmmo : ItemSlotArcher {
 		public override EnumItemStorageFlags StorageType => EnumItemStorageFlags.Arrow;
 		public ItemSlotArcherAmmo(InventoryArcher inventory) : base(inventory) {
-			BackgroundIcon = "itemslot-quiver.svg";
+			BackgroundIcon = "soldiercommand:textures/icons/itemslot-quiver.svg";
 		}
 
 		public override bool CanTakeFrom(ItemSlot sourceSlot, EnumMergePriority priority = EnumMergePriority.AutoMerge) {
@@ -123,15 +120,14 @@ namespace SoldierCommand {
 		}
 
 		private bool IsAcceptable(ItemSlot sourceSlot) {
-			var collectible = sourceSlot?.Itemstack?.Collectible;
 			// Only allow arrows or other types of ammo.
-			return sourceSlot?.Itemstack?.Item is ItemArrow || collectible.Attributes["projectile"].Exists;
+			return sourceSlot.Itemstack.Item is ItemArrow || (sourceSlot?.Itemstack?.Collectible?.Attributes["projectile"]?.Exists ?? false);
 		}
 	}
 
 	public class ItemSlotArcherHeal : ItemSlotArcher {
 		public ItemSlotArcherHeal(InventoryArcher inventory) : base(inventory) {
-			BackgroundIcon = "itemslot-bandage.svg";
+			BackgroundIcon = "itemslot-bandage";
 		}
 
 		public override bool CanTakeFrom(ItemSlot sourceSlot, EnumMergePriority priority = EnumMergePriority.AutoMerge) {
@@ -143,9 +139,8 @@ namespace SoldierCommand {
 		}
 
 		private bool IsAcceptable(ItemSlot sourceSlot) {
-			var collectible = sourceSlot?.Itemstack?.Collectible;
 			// Make sure the item is a healing item.
-			return collectible?.Attributes?["healthByType"]?.Exists ?? false;
+			return sourceSlot?.Itemstack?.Item?.Code?.Path?.Contains("bandage") ?? false;
 		}
 	}
 }

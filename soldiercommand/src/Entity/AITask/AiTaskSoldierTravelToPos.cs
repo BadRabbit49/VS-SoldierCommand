@@ -9,7 +9,7 @@ namespace SoldierCommand {
 		public Vec3d MainTarget;
 
 		bool done;
-		float moveSpeed = 0.03f;
+		float moveSpeed = 0.04f;
 		float targetDistance = 0.5f;
 		int searchDepth = 5000;
 
@@ -20,9 +20,9 @@ namespace SoldierCommand {
 		public override void LoadConfig(JsonObject taskConfig, JsonObject aiConfig) {
 			base.LoadConfig(taskConfig, aiConfig);
 			if (taskConfig["movespeed"] != null) {
-				moveSpeed = taskConfig["movespeed"].AsFloat(0.03f);
+				moveSpeed = taskConfig["movespeed"].AsFloat(1f);
 			}
-			soldierPathTraverser = entity.GetBehavior<BehaviorAlternatePathtraverser>().soldierWaypointsTraverser;
+			soldierPathTraverser = entity.GetBehavior<BehaviorTraverser>().soldierWaypointsTraverser;
 		}
 
 		private double moveDownToFloor(int x, double y, int z) {
@@ -43,11 +43,9 @@ namespace SoldierCommand {
 
 		public override void StartExecute() {
 			base.StartExecute();
-
 			done = false;
 			bool ok = soldierPathTraverser.NavigateTo(MainTarget, moveSpeed, targetDistance, OnGoalReached, OnStuck, true, searchDepth);
 			var sapi = entity.Api as ICoreServerAPI;
-			var stolentraverser = soldierPathTraverser;
 		}
 
 		public override bool ContinueExecute(float dt) {

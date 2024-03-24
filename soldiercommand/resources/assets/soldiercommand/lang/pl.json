@@ -1,0 +1,6 @@
+{
+	"item-creature-humanoid-archer-male": "Żołnierz",
+	"item-creature-humanoid-archer-female": "Żołnierz",
+	"command:interact-revive": "Wskrześ Żołnierza",
+	"command:message-soldier-dead": "Martwy Żołnierz"
+}
